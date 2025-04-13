@@ -115,10 +115,12 @@ function takeCommand(message) {
             return;
         }
     }
-else if (message.includes("open telegram")) {
-    window.open("https://telegram.org/", "_blank");
-    speak("Opening Telegram...");
-}
+  if (message.includes("open telegram")) {
+        window.open("https://web.telegram.org/", "_blank");
+        speak("Opening Telegram...");
+        return; 
+    }
+
     
     // Information queries
     if (message.includes("what is") || message.includes("who is") || message.includes("what are") || message.includes("how to")) {
