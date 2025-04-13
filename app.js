@@ -1,25 +1,13 @@
-
-const btn = document.querySelector('.talk')
-const content = document.querySelector('.content')
-
-
-// function speak(text) {
-//     const text_speak = new SpeechSynthesisUtterance(text);
-
-//     text_speak.rate = 0.8;
-//     text_speak.volume = 5;
-//     text_speak.pitch = 12;
-
-//     window.speechSynthesis.speak(text_speak);
-// }
+const btn = document.querySelector('.talk');
+const content = document.querySelector('.content');
 
 // Female voice settings
 let femaleVoice;
 function initVoices() {
     const voices = window.speechSynthesis.getVoices();
-    femaleVoice = voices.find(voice => 
-        voice.name.includes('Female') || 
-        voice.name.includes('Woman') || 
+    femaleVoice = voices.find(voice =>
+        voice.name.includes('Female') ||
+        voice.name.includes('Woman') ||
         voice.name.includes('Zira') ||  // For Edge
         voice.name.includes('Google UK Female') // For Chrome
     );
@@ -35,7 +23,7 @@ function speak(text) {
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     // Voice settings
     if (femaleVoice) {
         utterance.voice = femaleVoice;
@@ -43,295 +31,169 @@ function speak(text) {
     utterance.rate = 1.0;  // More natural speed
     utterance.pitch = 1.2; // Slightly higher pitch for female voice
     utterance.volume = 1;
-    
+
     // Event for better error handling
     utterance.onerror = (event) => {
         console.error('Speech error:', event.error);
     };
-    
+
     window.speechSynthesis.speak(utterance);
 }
 
-// function wishMe() {
-//     var day = new Date();
-//     var hour = day.getHours();
+function wishMe() {
+    var day = new Date();
+    var hour = day.getHours();
 
-//     if (hour >= 0 && hour < 12) {
-//         speak("hello guys...")
-//     }
-
-//     else if (hour > 12 && hour < 17) {
-//         speak("hello guys...")
-//     }
-
-//     else {
-//         speak("hello guys...")
-//     }
-
-// }
+    if (hour >= 0 && hour < 12) {
+        speak("Good morning!");
+    }
+    else if (hour >= 12 && hour < 17) {
+        speak("Good afternoon!");
+    }
+    else {
+        speak("Good evening!");
+    }
+}
 
 window.addEventListener('load', () => {
-    speak(" hey guys ia am  rudra design by prashant kumar  i am your voice assistant.  i am here to help you with your work.  please tell me how can i help you?");
     wishMe();
+    setTimeout(() => {
+        speak("Hey guys, I am Rudra, designed by Prashant Kumar. I am your voice assistant. I am here to help you with your work. Please tell me how can I help you?");
+    }, 1000);
 });
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const recognition = new SpeechRecognition();
+if (!SpeechRecognition) {
+    console.error('Speech Recognition API not supported in this browser');
+    content.textContent = "Speech Recognition not supported in your browser";
+} else {
+    const recognition = new SpeechRecognition();
+    
+    recognition.onresult = (event) => {
+        const currentIndex = event.resultIndex;
+        const transcript = event.results[currentIndex][0].transcript;
+        content.textContent = transcript;
+        takeCommand(transcript.toLowerCase());
+    }
 
-recognition.onresult = (event) => {
-    const currentIndex = event.resultIndex;
-    const transcript = event.results[currentIndex][0].transcript;
-    content.textContent = transcript;
-    takeCommand(transcript.toLowerCase());
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        content.textContent = "Error occurred in recognition: " + event.error;
+    }
 
+    btn.addEventListener('click', () => {
+        content.textContent = "Listening....";
+        recognition.start();
+    });
 }
 
-btn.addEventListener('click', () => {
-    content.textContent = "Listening...."
-    recognition.start();
-})
-
 function takeCommand(message) {
-    if (message.includes('hey') || message.includes('hello')) {
-        speak("Hello , How May I Help You?");
-    }
-    else if (message.includes(" google")) {
-        window.open("https://google.com", "_blank");
-        speak(" prashnt is Opening Google...")
-    }
-    else if (message.includes("youtube")) {
-        window.open("https://youtube.com", "_blank");
-        speak("Opening Youtube...")
-    }
-    else if (message.includes("facebook")) {
-        window.open("https://facebook.com", "_blank");
-        speak("Opening Facebook...")
+    // Browser commands
+    const browserCommands = {
+        'open google': {url: "https://google.com", response: "Opening Google..."},
+        'open youtube': {url: "https://youtube.com", response: "Opening YouTube..."},
+        'open facebook': {url: "https://facebook.com", response: "Opening Facebook..."},
+        'open whatsapp': {url: "https://web.whatsapp.com/", response: "Opening WhatsApp..."},
+        'open wa business': {url: "https://web.whatsapp.com/business/", response: "Opening WhatsApp Business..."},
+        'open chrome': {url: "https://www.google.com/chrome/", response: "Opening Chrome..."},
+        'open firefox': {url: "https://www.mozilla.org/en-US/firefox/new/", response: "Opening Firefox..."},
+        'open edge': {url: "https://www.microsoft.com/en-us/edge", response: "Opening Microsoft Edge..."},
+        'open brave': {url: "https://brave.com/", response: "Opening Brave..."},
+        'open instagram': {url: "https://www.instagram.com/", response: "Opening Instagram..."},
+        'open zoom': {url: "https://zoom.us/", response: "Opening Zoom..."},
+        'open microsoft teams': {url: "https://teams.microsoft.com/", response: "Opening Microsoft Teams..."},
+        'open google meet': {url: "https://meet.google.com/", response: "Opening Google Meet..."},
+        'open notepad': {url: "https://devprk.github.io/note-book/", response: "Opening Notepad..."}
+    };
+
+    // Check for browser commands first
+    for (const [command, action] of Object.entries(browserCommands)) {
+        if (message.includes(command)) {
+            window.open(action.url, "_blank");
+            speak(action.response);
+            return;
+        }
     }
 
-    else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
-        window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-        const finalText = "This is what i found on internet regarding " + message;
+    // Information queries
+    if (message.includes("what is") || message.includes("who is") || message.includes("what are") || message.includes("how to")) {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
+        speak("Here's what I found on the internet.");
+        return;
+    }
+
+    if (message.includes("wikipedia")) {
+        window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "").trim()}`, "_blank");
+        speak("Searching Wikipedia for that.");
+        return;
+    }
+
+    // Utility commands
+    if (message.includes("weather")) {
+        window.open(`https://www.google.com/search?q=weather+${message.replace("weather", "").trim()}`, "_blank");
+        speak("Here's the weather information.");
+        return;
+    }
+
+    if (message.includes("news")) {
+        window.open("https://news.google.com/", "_blank");
+        speak("Here are the latest news headlines.");
+        return;
+    }
+
+    if (message.includes("music") || message.includes("song")) {
+        const query = message.replace(/(music|song)/, "").trim();
+        window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, "_blank");
+        speak(`Searching for ${query || 'music'}.`);
+        return;
+    }
+
+    if (message.includes("time")) {
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        speak(`The current time is ${time}`);
+        return;
+    }
+
+    if (message.includes("date")) {
+        const date = new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        speak(`Today is ${date}`);
+        return;
+    }
+
+    if (message.includes('open notepad')) {
+        window.open('https://devprk.github.io/note-book/', "_blank")
+        const finalText = "Opening Notepad";
         speak(finalText);
-
+        return;
     }
 
-    else if (message.includes('wikipedia')) {
-        window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "")}`, "_blank");
-        const finalText = "This is what i found on wikipedia regarding " + message;
-        speak(finalText);
-    }
-    
-    else if (message.includes('weather')) {
-        window.open(`https://www.google.com/search?q=weather+${message.replace("weather", "")}`, "_blank");
-        const finalText = "This is what i found on internet regarding " + message;
-        speak(finalText);
+    if (message.includes("your name") || message.includes("who are you")) {
+        speak("I am Rudra, your personal voice assistant. Designed by Prashant Kumar to help you with various tasks.");
+        return;
     }
 
-    else if (message.includes('news')) {
-        window.open(`https://news.google.com/`, "_blank");
-        const finalText = "This is what i found on internet regarding " + message;
-        speak(finalText);
+    if (message.includes("thank you") || message.includes("thanks")) {
+        speak("You're welcome! Is there anything else I can help you with?");
+        return;
     }
 
-    else if (message.includes('music')) {
-        window.open(`https://www.youtube.com/results?search_query=${message.replace("music", "")}`, "_blank");
-        const finalText = "This is what i found on internet regarding " + message;
-        speak(finalText);
+    if (message.includes("bye") || message.includes("goodbye") || message.includes("exit")) {
+        speak("Goodbye! Have a great day!");
+        setTimeout(() => {
+            // Note: window.close() only works for windows opened by scripts
+            // You might want to just hide the interface instead
+            document.body.innerHTML = "<h1>Goodbye!</h1>";
+        }, 2000);
+        return;
     }
 
-     else if (message.include('whatsapp'))
-        {
-            window.open('https://web.whatsapp.com/', "_blank")
-            const finalText = "Opening whatsapp";   
-            speak(finalText);
-        }
-        else if (message.includes('WA Business')) {
-            window.open('https://web.whatsapp.com/', "_blank")  
-    
-            const finalText = "Opening whatsapp business";
-            speak(finalText);
-        }
-         else if (message.includes('crome')) {
-            window.open('https://www.google.com/chrome/', "_blank")
-            const finalText = "Opening crome";
-            speak(finalText);
-        }
-        else if (message.includes('firefox')) {
-            window.open('https://www.mozilla.org/en-US/firefox/new/', "_blank")
-            const finalText = "Opening firefox";
-            speak(finalText);
-        }
-        else if (message.includes('edge')) {
-            window.open('https://www.microsoft.com/en-us/edge', "_blank")
-            const finalText = "Opening edge";
-            speak(finalText);
-        }
-        else if (message.includes('brave')) {
-            window.open('https://brave.com/', "_blank")
-            const finalText = "Opening brave";  
-            speak(finalText);
-        }
-        else if (message.includes('instantgram')) {
-            window.open('https://www.instagram.com/', "_blank")
-            const finalText = "Opening instantgram";
-            speak(finalText);
-        }
-        else if (message.includes('zoom')) {
-            window.open('https://zoom.us/', "_blank")
-            const finalText = "Opening zoom";
-            speak(finalText);
-        }
-        else if (message.includes('microsoft teams')) {
-            window.open('https://teams.microsoft.com/', "_blank")
-            const finalText = "Opening microsoft teams";
-            speak(finalText);
-        }
-        else if (message.includes('google meet')) {
-            window.open('https://meet.google.com/', "_blank")
-            const finalText = "Opening google meet";
-            speak(finalText);
-        }
-        
-    
-        else if (message.includes('open')) {
-            const appName = message.replace('open', '').trim();
-            const finalText = "Opening " + appName;
-            speak(finalText);
-        }
-
-    else if (message.includes('time')) {
-        const time = new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" })
-        const finalText = time;
-        speak(finalText);
+    if (message.includes("hey") || message.includes("hello")) {
+        speak("Hello, how may I help you?");
+        return;
     }
 
-    else if (message.includes('date')) {
-        const date = new Date().toLocaleString(undefined, { month: "short", day: "numeric" })
-        const finalText = date;
-        speak(finalText);
-    }
-    
-    // else if (message.includes('visual studio code')) {
-    //     window.open('vscode:///')
-    //     const finalText = "Opening Visual Studio Code";
-    //     speak(finalText);
-       
-    // }
-
-    // else if (message.includes('calculator')) {
-    //     window.open('Calculator:///')
-    //     const finalText = "Opening Calculator";
-    //     speak(finalText);
-    // }
-    
-    // else if (message.includes('notepad')) {
-    //     window.open('https://devprk.github.io/note-book/', "_blank")
-    //     const finalText = "Opening Notepad";
-    //     speak(finalText);
-   
-    // }
-    // else if (message.includes('paint')) {
-    //     window.open('Paint:///')
-    //     const finalText = "Opening Paint";
-    //     speak(finalText);
-    // }
-    
-    // else if (message.includes('command prompt')) {
-    //     window.open('command prompt///')
-    //     const finalText = "Opening Command Prompt";
-    //     speak(finalText);
-    // }
-
-    // else if (message.includes('whatsapp')) {
-    //     window.open('whatsapp:///')
-    //     const finalText = "Opening whatsapp";
-    //     speak(finalText);
-    // }
-    
-    // else if (message.includes('youtube')) {
-    //     window.open('youtube:///')
-    //     const finalText = "Opening youtube";
-    //     speak(finalText);
-    // }
-    
-    // else if (message.includes('facebook')) {
-    //     window.open('facebook:///')
-    //     const finalText = "Opening facebook";
-    //     speak(finalText);
-    // }
-    
-    // else if (message.includes('instagram')) {
-    //     window.open('instagram:///')
-    //     const finalText = "Opening instagram";
-    //     speak(finalText);
-    // }
-    
-    // else if (message.includes('twitter')) {
-    //     window.open('twitter:///')
-    //     const finalText = "Opening twitter";
-    //     speak(finalText);
-    // }
-        
-    //     else if (message.includes('linkedin')) {
-    //         window.open('linkedin:///')
-    //         const finalText = "Opening linkedin";
-    //         speak(finalText);
-    //     }
-        
-    //     else if (message.includes('snapchat')) {
-    //         window.open('snapchat:///')
-    //         const finalText = "Opening snapchat";
-    //         speak(finalText);
-    //     }
-        
-    //     else if (message.includes('tiktok')) {
-    //         window.open('tiktok:///')
-    //         const finalText = "Opening tiktok";
-    //         speak(finalText);
-    //     }
-        
-    //     else if (message.includes('telegram')) {
-    //         window.open('telegram:///')
-    //         const finalText = "Opening telegram";
-    //         speak(finalText);
-    //     }
-            
-    //     else if (message.includes('Unigram')) {
-    //         window.open('Unigram:///')
-    //         const finalText = "Opening Unigram";
-    //         speak(finalText);
-    //     }
-    //         else if (message.includes('skype')) {
-    //             window.open('skype:///')
-    //             const finalText = "Opening skype";
-    //             speak(finalText);
-    //         }
-            
-    //         else if (message.includes('viber')) {
-    //             window.open('viber:///')
-    //             const finalText = "Opening viber";
-    //             speak(finalText);
-    //         }
-            
-    //         else if (message.includes('discord')) {
-    //             window.open('discord:///')
-    //             const finalText = "Opening discord";
-    //             speak(finalText);
-    //         }
-            
-    //         else if (message.includes('slack')) {
-    //             window.open('slack:///')
-    //             const finalText = "Opening slack";
-    //             speak(finalText);
-    //         }
-           
-    else if (message.includes('bye')) {
-            window.close();
-        }
-        else {
-            window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
-            const finalText = "I found some information for " + message + " on google";
-            speak(finalText);
-        }
-    } 
+    // Default action for unrecognized commands
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
+    speak("I found some information for " + message + " on google");
+}
