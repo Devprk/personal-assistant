@@ -1,0 +1,159 @@
+const btn = document.querySelector('.talk');
+const content = document.querySelector('.content');
+
+// Female voice settings
+let femaleVoice;
+function initVoices() {
+    const voices = window.speechSynthesis.getVoices();
+    femaleVoice = voices.find(voice => 
+        voice.name.includes('Female') || 
+        voice.name.includes('Woman') || 
+        voice.name.includes('Zira') ||  // For Edge
+        voice.name.includes('Google UK Female') // For Chrome
+    );
+}
+
+// Wait for voices to be loaded
+window.speechSynthesis.onvoiceschanged = initVoices;
+initVoices(); // Try immediately in case they're already loaded
+
+function speak(text) {
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Voice settings
+    if (femaleVoice) {
+        utterance.voice = femaleVoice;
+    }
+    utterance.rate = 1.0;  // More natural speed
+    utterance.pitch = 1.2; // Slightly higher pitch for female voice
+    utterance.volume = 1;
+    
+    // Event for better error handling
+    utterance.onerror = (event) => {
+        console.error('Speech error:', event.error);
+    };
+    
+    window.speechSynthesis.speak(utterance);
+}
+
+function wishMe() {
+    const day = new Date();
+    const hour = day.getHours();
+    const greetings = [
+        "Hello beautiful ladies! How can I assist you today?",
+        "Hi girls! What can I do for you?",
+        "Hey there! I'm here to help you with anything you need"
+    ];
+    
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    
+    if (hour >= 0 && hour < 12) {
+        speak("Good morning! " + randomGreeting);
+    } else if (hour >= 12 && hour < 17) {
+        speak("Good afternoon! " + randomGreeting);
+    } else {
+        speak("Good evening! " + randomGreeting);
+    }
+}
+
+// Initial greeting (uncomment when ready)
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        speak("Hello! I'm Rudra, your personal voice assistant designed by Prashant Kumar.");
+        setTimeout(() => {
+            wishMe();
+        }, 1500);
+    }, 500);
+});
+
+// Speech recognition setup
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (!SpeechRecognition) {
+    content.textContent = "Speech recognition not supported in your browser. Try Chrome or Edge.";
+    btn.disabled = true;
+} else {
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    // Visual feedback
+    btn.addEventListener('click', () => {
+        content.textContent = "Listening... Speak now";
+        btn.classList.add('listening');
+        try {
+            recognition.start();
+        } catch (e) {
+            content.textContent = "Error: " + e.message;
+            btn.classList.remove('listening');
+        }
+    });
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        content.textContent = transcript;
+        takeCommand(transcript.toLowerCase());
+    };
+
+    recognition.onerror = (event) => {
+        content.textContent = "Error: " + event.error;
+        btn.classList.remove('listening');
+    };
+
+    recognition.onend = () => {
+        btn.classList.remove('listening');
+        if (content.textContent === "Listening... Speak now") {
+            content.textContent = "Click to speak again";
+        }
+    };
+}
+
+function takeCommand(message) {
+    if (!message) return;
+
+    // Add more feminine responses
+    const responses = {
+        greeting: ["Hello darling!", "Hi sweetie!", "Hey gorgeous!"],
+        confirmation: ["Sure thing!", "Absolutely!", "Right away!"],
+        searching: ["Let me check that for you", "I'll find that information", "Searching now"]
+    };
+
+    const getRandomResponse = (type) => responses[type][Math.floor(Math.random() * responses[type].length)];
+
+    if (message.includes('hey') || message.includes('hello') || message.includes('hi')) {
+        speak(getRandomResponse('greeting') + " How can I help you today?");
+    }
+    else if (message.includes("open google")) {
+        window.open("https://google.com", "_blank");
+        speak(getRandomResponse('confirmation') + " Opening Google for you");
+    }
+    else if (message.includes("open youtube")) {
+        window.open("https://youtube.com", "_blank");
+        speak(getRandomResponse('confirmation') + " Opening YouTube");
+    }
+    // [Keep all your other command conditions...]
+    else if (message.includes('weather')) {
+        window.open(`https://www.google.com/search?q=weather`, "_blank");
+        speak(getRandomResponse('searching') + " for weather information");
+    }
+    else if (message.includes('music')) {
+        window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(message)}`, "_blank");
+        speak("Playing some music for you");
+    }
+    // [Add all your other commands here...]
+    else if (message.includes('bye') || message.includes('exit') || message.includes('goodbye')) {
+        speak("Goodbye beautiful! Have a wonderful day!");
+        setTimeout(() => {
+            content.textContent = "You can close this tab now";
+        }, 2000);
+    }
+    else {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
+        speak(getRandomResponse('searching') + ` for ${message}. Here's what I found.`);
+    }
+}
