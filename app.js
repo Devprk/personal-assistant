@@ -96,15 +96,15 @@ function takeCommand(message) {
     if (message.includes('hey') || message.includes('hello')) {
         speak("Hello , How May I Help You?");
     }
-    else if (message.includes("open google")) {
+    else if (message.includes(" google")) {
         window.open("https://google.com", "_blank");
         speak(" prashnt is Opening Google...")
     }
-    else if (message.includes("open youtube")) {
+    else if (message.includes("youtube")) {
         window.open("https://youtube.com", "_blank");
         speak("Opening Youtube...")
     }
-    else if (message.includes("open facebook")) {
+    else if (message.includes("facebook")) {
         window.open("https://facebook.com", "_blank");
         speak("Opening Facebook...")
     }
@@ -140,7 +140,65 @@ function takeCommand(message) {
         speak(finalText);
     }
 
+     else if (message.include('whatsapp'))
+        {
+            window.open('https://web.whatsapp.com/', "_blank")
+            const finalText = "Opening whatsapp";   
+            speak(finalText);
+        }
+        else if (message.includes('WA Business')) {
+            window.open('https://web.whatsapp.com/', "_blank")  
     
+            const finalText = "Opening whatsapp business";
+            speak(finalText);
+        }
+         else if (message.includes('crome')) {
+            window.open('https://www.google.com/chrome/', "_blank")
+            const finalText = "Opening crome";
+            speak(finalText);
+        }
+        else if (message.includes('firefox')) {
+            window.open('https://www.mozilla.org/en-US/firefox/new/', "_blank")
+            const finalText = "Opening firefox";
+            speak(finalText);
+        }
+        else if (message.includes('edge')) {
+            window.open('https://www.microsoft.com/en-us/edge', "_blank")
+            const finalText = "Opening edge";
+            speak(finalText);
+        }
+        else if (message.includes('brave')) {
+            window.open('https://brave.com/', "_blank")
+            const finalText = "Opening brave";  
+            speak(finalText);
+        }
+        else if (message.includes('instantgram')) {
+            window.open('https://www.instagram.com/', "_blank")
+            const finalText = "Opening instantgram";
+            speak(finalText);
+        }
+        else if (message.includes('zoom')) {
+            window.open('https://zoom.us/', "_blank")
+            const finalText = "Opening zoom";
+            speak(finalText);
+        }
+        else if (message.includes('microsoft teams')) {
+            window.open('https://teams.microsoft.com/', "_blank")
+            const finalText = "Opening microsoft teams";
+            speak(finalText);
+        }
+        else if (message.includes('google meet')) {
+            window.open('https://meet.google.com/', "_blank")
+            const finalText = "Opening google meet";
+            speak(finalText);
+        }
+        
+    
+        else if (message.includes('open')) {
+            const appName = message.replace('open', '').trim();
+            const finalText = "Opening " + appName;
+            speak(finalText);
+        }
 
     else if (message.includes('time')) {
         const time = new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" })
@@ -154,30 +212,30 @@ function takeCommand(message) {
         speak(finalText);
     }
     
-    else if (message.includes('visual studio code')) {
-        window.open('vscode:///')
-        const finalText = "Opening Visual Studio Code";
-        speak(finalText);
+    // else if (message.includes('visual studio code')) {
+    //     window.open('vscode:///')
+    //     const finalText = "Opening Visual Studio Code";
+    //     speak(finalText);
        
-    }
+    // }
 
-    else if (message.includes('calculator')) {
-        window.open('Calculator:///')
-        const finalText = "Opening Calculator";
-        speak(finalText);
-    }
+    // else if (message.includes('calculator')) {
+    //     window.open('Calculator:///')
+    //     const finalText = "Opening Calculator";
+    //     speak(finalText);
+    // }
     
-    else if (message.includes('notepad')) {
-        window.open('https://devprk.github.io/note-book/', "_blank")
-        const finalText = "Opening Notepad";
-        speak(finalText);
+    // else if (message.includes('notepad')) {
+    //     window.open('https://devprk.github.io/note-book/', "_blank")
+    //     const finalText = "Opening Notepad";
+    //     speak(finalText);
    
-    }
-    else if (message.includes('paint')) {
-        window.open('Paint:///')
-        const finalText = "Opening Paint";
-        speak(finalText);
-    }
+    // }
+    // else if (message.includes('paint')) {
+    //     window.open('Paint:///')
+    //     const finalText = "Opening Paint";
+    //     speak(finalText);
+    // }
     
     // else if (message.includes('command prompt')) {
     //     window.open('command prompt///')
@@ -185,88 +243,88 @@ function takeCommand(message) {
     //     speak(finalText);
     // }
 
-    else if (message.includes('whatsapp')) {
-        window.open('whatsapp:///')
-        const finalText = "Opening whatsapp";
-        speak(finalText);
-    }
+    // else if (message.includes('whatsapp')) {
+    //     window.open('whatsapp:///')
+    //     const finalText = "Opening whatsapp";
+    //     speak(finalText);
+    // }
     
-    else if (message.includes('youtube')) {
-        window.open('youtube:///')
-        const finalText = "Opening youtube";
-        speak(finalText);
-    }
+    // else if (message.includes('youtube')) {
+    //     window.open('youtube:///')
+    //     const finalText = "Opening youtube";
+    //     speak(finalText);
+    // }
     
-    else if (message.includes('facebook')) {
-        window.open('facebook:///')
-        const finalText = "Opening facebook";
-        speak(finalText);
-    }
+    // else if (message.includes('facebook')) {
+    //     window.open('facebook:///')
+    //     const finalText = "Opening facebook";
+    //     speak(finalText);
+    // }
     
-    else if (message.includes('instagram')) {
-        window.open('instagram:///')
-        const finalText = "Opening instagram";
-        speak(finalText);
-    }
+    // else if (message.includes('instagram')) {
+    //     window.open('instagram:///')
+    //     const finalText = "Opening instagram";
+    //     speak(finalText);
+    // }
     
-    else if (message.includes('twitter')) {
-        window.open('twitter:///')
-        const finalText = "Opening twitter";
-        speak(finalText);
-    }
+    // else if (message.includes('twitter')) {
+    //     window.open('twitter:///')
+    //     const finalText = "Opening twitter";
+    //     speak(finalText);
+    // }
         
-        else if (message.includes('linkedin')) {
-            window.open('linkedin:///')
-            const finalText = "Opening linkedin";
-            speak(finalText);
-        }
+    //     else if (message.includes('linkedin')) {
+    //         window.open('linkedin:///')
+    //         const finalText = "Opening linkedin";
+    //         speak(finalText);
+    //     }
         
-        else if (message.includes('snapchat')) {
-            window.open('snapchat:///')
-            const finalText = "Opening snapchat";
-            speak(finalText);
-        }
+    //     else if (message.includes('snapchat')) {
+    //         window.open('snapchat:///')
+    //         const finalText = "Opening snapchat";
+    //         speak(finalText);
+    //     }
         
-        else if (message.includes('tiktok')) {
-            window.open('tiktok:///')
-            const finalText = "Opening tiktok";
-            speak(finalText);
-        }
+    //     else if (message.includes('tiktok')) {
+    //         window.open('tiktok:///')
+    //         const finalText = "Opening tiktok";
+    //         speak(finalText);
+    //     }
         
-        else if (message.includes('telegram')) {
-            window.open('telegram:///')
-            const finalText = "Opening telegram";
-            speak(finalText);
-        }
+    //     else if (message.includes('telegram')) {
+    //         window.open('telegram:///')
+    //         const finalText = "Opening telegram";
+    //         speak(finalText);
+    //     }
             
-        else if (message.includes('Unigram')) {
-            window.open('Unigram:///')
-            const finalText = "Opening Unigram";
-            speak(finalText);
-        }
-            else if (message.includes('skype')) {
-                window.open('skype:///')
-                const finalText = "Opening skype";
-                speak(finalText);
-            }
+    //     else if (message.includes('Unigram')) {
+    //         window.open('Unigram:///')
+    //         const finalText = "Opening Unigram";
+    //         speak(finalText);
+    //     }
+    //         else if (message.includes('skype')) {
+    //             window.open('skype:///')
+    //             const finalText = "Opening skype";
+    //             speak(finalText);
+    //         }
             
-            else if (message.includes('viber')) {
-                window.open('viber:///')
-                const finalText = "Opening viber";
-                speak(finalText);
-            }
+    //         else if (message.includes('viber')) {
+    //             window.open('viber:///')
+    //             const finalText = "Opening viber";
+    //             speak(finalText);
+    //         }
             
-            else if (message.includes('discord')) {
-                window.open('discord:///')
-                const finalText = "Opening discord";
-                speak(finalText);
-            }
+    //         else if (message.includes('discord')) {
+    //             window.open('discord:///')
+    //             const finalText = "Opening discord";
+    //             speak(finalText);
+    //         }
             
-            else if (message.includes('slack')) {
-                window.open('slack:///')
-                const finalText = "Opening slack";
-                speak(finalText);
-            }
+    //         else if (message.includes('slack')) {
+    //             window.open('slack:///')
+    //             const finalText = "Opening slack";
+    //             speak(finalText);
+    //         }
            
     else if (message.includes('bye')) {
             window.close();
