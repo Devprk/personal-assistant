@@ -116,7 +116,7 @@ function takeCommand(message) {
         }
     }
   if (message.includes("open telegram")) {
-        window.open("https://web.telegram.org/", "_blank");
+        window.open("https://telegram.org/", "_blank");
         speak("Opening Telegram...");
         return; 
     }
