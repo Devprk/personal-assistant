@@ -94,8 +94,8 @@ function takeCommand(message) {
         'open google': {url: "https://google.com", response: "Opening Google..."},
         'open youtube': {url: "https://youtube.com", response: "Opening YouTube..."},
         'open facebook': {url: "https://facebook.com", response: "Opening Facebook..."},
-        'open whatsapp': {url: "https://web.whatsapp.com/", response: "Opening WhatsApp..."},
-        'open wa business': {url: "https://web.whatsapp.com/business/", response: "Opening WhatsApp Business..."},
+        'open whatsapp': {url: "https://whatsapp.com/", response: "Opening WhatsApp..."},
+        'open wa business': {url: "https://whatsapp.com/business/", response: "Opening WhatsApp Business..."},
         'open chrome': {url: "https://www.google.com/chrome/", response: "Opening Chrome..."},
         'open firefox': {url: "https://www.mozilla.org/en-US/firefox/new/", response: "Opening Firefox..."},
         'open edge': {url: "https://www.microsoft.com/en-us/edge", response: "Opening Microsoft Edge..."},
@@ -115,7 +115,11 @@ function takeCommand(message) {
             return;
         }
     }
-
+else if (message.includes("open telegram")) {
+    window.open("https://telegram.org/", "_blank");
+    speak("Opening Telegram...");
+}
+    
     // Information queries
     if (message.includes("what is") || message.includes("who is") || message.includes("what are") || message.includes("how to")) {
         window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
