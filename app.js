@@ -208,7 +208,7 @@ function takeCommand(message) {
     }
 
     if (message.includes("your name") || message.includes("who are you")|| message.includes("name")) {
-        speak("I am Maya, your personal voice assistant. Designed by Prashant Kumar to help you with various tasks.");
+        speak("I am Maya, I am voice assistant. Designed by Prashant Kumar to help you with various tasks.");
         return;
     }
 
