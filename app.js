@@ -141,12 +141,7 @@ function takeCommand(message) {
         return; 
     }
     
-    // Information queries
-    if (message.includes("what is") || message.includes("who is") || message.includes("what are") || message.includes("how to")) {
-        window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
-        speak("Here's what I found on the internet.");
-        return;
-    }
+
 
     if (message.includes("wikipedia")) {
         window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "").trim()}`, "_blank");
@@ -252,6 +247,12 @@ function takeCommand(message) {
         speak("Opening Calculator");
         return;
     }
+        // Information queries
+    if (message.includes("what is") || message.includes("who is") || message.includes("what are") || message.includes("how to")) {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
+        speak("Here's what I found on the internet.");
+        return;
+    }
    
     if (message.includes("bye") || message.includes("goodbye") || message.includes("exit")) {
         speak("Goodbye! Have a great day!");
@@ -267,6 +268,7 @@ function takeCommand(message) {
         speak("Hello, how may I help you?");
         return;
     }
+    
 
     // Default action for unrecognized commands
     window.open(`https://www.google.com/search?q=${encodeURIComponent(message)}`, "_blank");
