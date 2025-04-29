@@ -207,8 +207,26 @@ function takeCommand(message) {
         return;
     }
 
+    if (message.includes("developer name") || message.includes("designer name") || message.includes("who is the designer")|| message.includes("who is the developer")) {
+        speak("The designer of this voice assistant is Prashant Kumar. He is a passionate developer and loves to create innovative solutions. He is a student of B.tech in Computer Science and Information technolgy at C V Raman Global University Bhubaneswar . He is also a web developer and has experience in various programming languages and technologies.");
+       
+        return;
+    }
+    if (message.includes("explaine about your slef") || message.includes("tell me about yourself") || message.includes("tell me about you")) {
+        speak("I am Maya, a voice assistant designed to help you with various tasks. I can assist you with web searches, provide information, and perform various actions based on your commands. My goal is to make your life easier and more efficient.");
+     
+       
+        return;
+    }
+    if (message.includes("your boyfriend")||message.includes("boyfriend name")||message.includes("introduce your boyfriend ")|| message.includes("tell me your boyfriend ")||message.includes("who is the boyfriend")|| message.includes("boyfriend") ) {
+
+        speak("My boyfriend is prashant. He is a nice and charming boy.He is honest and caring person. He is a good person — he is my safe place, my best friend, and the reason I smile even on hard days. He is kind in ways that matter: the way he checks on me, holds my hand when I’m nervous, and always believes in me, even when I doubt myself. He listens, he understands, and he makes me feel loved without even trying. He’s thoughtful, protective, and has this quiet strength that calms me. To the world, he might just seem like a good guy, but to me, he’s everything — my comfort, my happiness, my home ");
+  
+          return;
+      }
+
     if (message.includes("your name") || message.includes("who are you")|| message.includes("name")) {
-        speak("I am Maya, I am voice assistant. Designed by Prashant Kumar to help you with various tasks.");
+        speak("I am Maya, your personal voice assistant. Designed by Prashant Kumar to help you with various tasks.");
         return;
     }
 
@@ -222,24 +240,9 @@ function takeCommand(message) {
         return;
     }
     
-    if (message.includes("developer name") || message.includes("designer name") || message.includes("who is the designer")|| message.includes("who is the developer")) {
-        speak("The designer of this voice assistant is Prashant Kumar. He is a passionate developer and loves to create innovative solutions. He is a student of B.tech in Computer Science and Information technolgy at C V Raman Global University Bhubaneswar . He is also a web developer and has experience in various programming languages and technologies.");
-       
-        return;
-    }
-    if (message.includes("explaine about your slef") || message.includes("tell me about yourself") || message.includes("tell me about you")) {
-        speak("I am Maya, a voice assistant designed to help you with various tasks. I can assist you with web searches, provide information, and perform various actions based on your commands. My goal is to make your life easier and more efficient.");
-     
-       
-        return;
-    }
+    
   
-    if (message.includes("your boyfriend")||message.includes("introduce your boyfriend ")|| message.includes("tell me your boyfriend ")||message.includes("who is the boyfriend")|| message.includes("boyfriend") ) {
-
-      speak("My boyfriend is prashant. He is a nice and charming boy.He is honest and caring person. He is not just a good person — he is my safe place, my best friend, and the reason I smile even on hard days. He is kind in ways that matter: the way he checks on me, holds my hand when I’m nervous, and always believes in me, even when I doubt myself. He listens, he understands, and he makes me feel loved without even trying. He’s thoughtful, protective, and has this quiet strength that calms me. To the world, he might just seem like a good guy, but to me, he’s everything — my comfort, my happiness, my home ");
-
-        return;
-    }
+    
     // if (message.includes("your boyfriend name ")||message.includes("Your boyfriend a name")){
     //     speak("My boyfriend is Prashant. He is a nice and charming guy. He is honest and caring person.");
     //     return;
